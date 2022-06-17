@@ -1,4 +1,5 @@
 use super::RVector;
+use crate::OpErrors;
 
 // Implement vector, vector addition override where both inputs are consumed
 impl<T> std::ops::Sub for RVector<T>
@@ -7,20 +8,22 @@ where
 {
     type Output = Self;
     fn sub(self, other: Self) -> Self::Output {
-        if self.valid && other.valid && self.data.len() == other.data.len() {
-            let mut new_data = self.data.clone();
-            let iter_range = 0..self.data.len();
-            for idx in iter_range {
-                new_data[idx] = self.data[idx] - other.data[idx];
-            }
-            RVector {
-                data: new_data,
-                valid: true,
+        if let (Ok(my_data), Ok(other_data)) = (self.data, other.data) {
+            if my_data.len() == other_data.len() {
+                let mut new_data = Vec::new();
+                let iter_range = 0..my_data.len();
+                for idx in iter_range {
+                    new_data.push(my_data[idx] - other_data[idx]);
+                }
+                RVector { data: Ok(new_data) }
+            } else {
+                RVector {
+                    data: Err(OpErrors::MismatchedSizes),
+                }
             }
         } else {
             RVector {
-                data: Vec::new(),
-                valid: false,
+                data: Err(OpErrors::InvalidInputs),
             }
         }
     }
@@ -34,20 +37,22 @@ where
 {
     type Output = RVector<T>;
     fn sub(self, other: &'b RVector<T>) -> RVector<T> {
-        if self.valid && other.valid && self.data.len() == other.data.len() {
-            let mut new_data = self.data.to_vec();
-            let iter_range = 0..self.data.len();
-            for idx in iter_range {
-                new_data[idx] = self.data[idx] - other.data[idx];
-            }
-            RVector {
-                data: new_data,
-                valid: true,
+        if let (Ok(my_data), Ok(other_data)) = (self.data.as_ref(), other.data.as_ref()) {
+            if my_data.len() == other_data.len() {
+                let mut new_data = Vec::new();
+                let iter_range = 0..my_data.len();
+                for idx in iter_range {
+                    new_data.push(my_data[idx] - other_data[idx]);
+                }
+                RVector { data: Ok(new_data) }
+            } else {
+                RVector {
+                    data: Err(OpErrors::MismatchedSizes),
+                }
             }
         } else {
             RVector {
-                data: Vec::new(),
-                valid: false,
+                data: Err(OpErrors::InvalidInputs),
             }
         }
     }

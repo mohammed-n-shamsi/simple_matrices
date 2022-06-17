@@ -1,4 +1,5 @@
 use super::RVector;
+use crate::OpErrors;
 
 // Implement vector, vector dot product override where both inputs are consumed
 // returns a vector of size 1
@@ -10,20 +11,24 @@ where
 {
     type Output = Self;
     fn mul(self, other: Self) -> Self::Output {
-        if self.valid && other.valid && self.data.len() == other.data.len() {
-            let mut new_data: T = self.data[0] * other.data[0];
-            let iter_range = 1..self.data.len();
-            for idx in iter_range {
-                new_data = new_data + self.data[idx] * other.data[idx];
-            }
-            RVector {
-                data: vec![new_data],
-                valid: true,
+        if let (Ok(my_data), Ok(other_data)) = (self.data, other.data) {
+            if my_data.len() == other_data.len() {
+                let mut new_data = my_data[0] * other_data[0];
+                let iter_range = 1..my_data.len();
+                for idx in iter_range {
+                    new_data = new_data + my_data[idx] * other_data[idx];
+                }
+                RVector {
+                    data: Ok(vec![new_data]),
+                }
+            } else {
+                RVector {
+                    data: Err(OpErrors::MismatchedSizes),
+                }
             }
         } else {
             RVector {
-                data: Vec::new(),
-                valid: false,
+                data: Err(OpErrors::InvalidInputs),
             }
         }
     }
@@ -39,20 +44,24 @@ where
 {
     type Output = RVector<T>;
     fn mul(self, other: &'b RVector<T>) -> RVector<T> {
-        if self.valid && other.valid && self.data.len() == other.data.len() {
-            let mut new_data: T = self.data[0] * other.data[0];
-            let iter_range = 1..self.data.len();
-            for idx in iter_range {
-                new_data = new_data + self.data[idx] * other.data[idx];
-            }
-            RVector {
-                data: vec![new_data],
-                valid: true,
+        if let (Ok(my_data), Ok(other_data)) = (self.data.as_ref(), other.data.as_ref()) {
+            if my_data.len() == other_data.len() {
+                let mut new_data = my_data[0] * other_data[0];
+                let iter_range = 1..my_data.len();
+                for idx in iter_range {
+                    new_data = new_data + my_data[idx] * other_data[idx];
+                }
+                RVector {
+                    data: Ok(vec![new_data]),
+                }
+            } else {
+                RVector {
+                    data: Err(OpErrors::MismatchedSizes),
+                }
             }
         } else {
             RVector {
-                data: Vec::new(),
-                valid: false,
+                data: Err(OpErrors::InvalidInputs),
             }
         }
     }

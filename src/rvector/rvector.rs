@@ -6,12 +6,11 @@ where
 {
     pub fn new(data: Vec<T>) -> Self {
         RVector {
-            data: data.clone(),
-            valid: true,
+            data: Ok(data.clone()),
         }
     }
+    //pub fn magnitude(&self)
 }
-
 #[cfg(test)]
 #[path = "./tests/rvector_tests.rs"]
 mod rvector_tests;
