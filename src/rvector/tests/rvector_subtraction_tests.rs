@@ -10,8 +10,9 @@ fn sub_vectors_both_consume() {
     let result = simple_data - to_sub;
     assert_eq!(result, true_result);
 }
+
 #[test]
-fn add_vectors_neither_consume() {
+fn sub_vectors_neither_consume() {
     let simple_data: RVector<i32> = RVector::new(vec![1, 2, 4, 5]);
 
     let to_sub: RVector<i32> = RVector::new(vec![5, 4, 2, 1]);

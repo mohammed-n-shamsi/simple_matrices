@@ -9,7 +9,7 @@ where
     T: std::ops::Add<Output = T>,
     T: Copy,
 {
-    type Output = Self;
+    type Output = Result<T, OpErrors>;
     fn mul(self, other: Self) -> Self::Output {
         if let (Ok(my_data), Ok(other_data)) = (self.data, other.data) {
             if my_data.len() == other_data.len() {
@@ -18,18 +18,12 @@ where
                 for idx in iter_range {
                     new_data = new_data + my_data[idx] * other_data[idx];
                 }
-                RVector {
-                    data: Ok(vec![new_data]),
-                }
+                Ok(new_data)
             } else {
-                RVector {
-                    data: Err(OpErrors::MismatchedSizes),
-                }
+                Err(OpErrors::MismatchedSizes)
             }
         } else {
-            RVector {
-                data: Err(OpErrors::InvalidInputs),
-            }
+            Err(OpErrors::InvalidInputs)
         }
     }
 }
@@ -42,8 +36,8 @@ where
     T: std::ops::Add<Output = T>,
     T: Copy,
 {
-    type Output = RVector<T>;
-    fn mul(self, other: &'b RVector<T>) -> RVector<T> {
+    type Output = Result<T, OpErrors>;
+    fn mul(self, other: &'b RVector<T>) -> Self::Output {
         if let (Ok(my_data), Ok(other_data)) = (self.data.as_ref(), other.data.as_ref()) {
             if my_data.len() == other_data.len() {
                 let mut new_data = my_data[0] * other_data[0];
@@ -51,18 +45,12 @@ where
                 for idx in iter_range {
                     new_data = new_data + my_data[idx] * other_data[idx];
                 }
-                RVector {
-                    data: Ok(vec![new_data]),
-                }
+                Ok(new_data)
             } else {
-                RVector {
-                    data: Err(OpErrors::MismatchedSizes),
-                }
+                Err(OpErrors::MismatchedSizes)
             }
         } else {
-            RVector {
-                data: Err(OpErrors::InvalidInputs),
-            }
+            Err(OpErrors::InvalidInputs)
         }
     }
 }

@@ -4,7 +4,8 @@ use crate::OpErrors;
 // Implement vector, vector addition override where both inputs are consumed
 impl<T> std::ops::Add for RVector<T>
 where
-    T: std::ops::Add<Output = T> + Copy,
+    T: std::ops::Add<Output = T>,
+    T: Copy,
 {
     type Output = Self;
     fn add(self, other: Self) -> Self::Output {

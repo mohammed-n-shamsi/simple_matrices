@@ -18,11 +18,7 @@ where
     // Return the magnitude squared, squaring will take away from
     // the generic-ness of the data, let caller handle square rooting
     pub fn magnitude_squared(&self) -> Result<T, OpErrors> {
-        let mag_squared_val = self * self;
-        match mag_squared_val.data {
-            Ok(valid_data) => Ok(valid_data[0]),
-            Err(error_enum) => Err(error_enum),
-        }
+        self * self
     }
 
     pub fn element_division(&self, divisor: T) -> RVector<T> {
