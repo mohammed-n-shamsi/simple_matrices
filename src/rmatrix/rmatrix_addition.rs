@@ -22,7 +22,7 @@ where
 {
     type Output = RMatrix<T>;
     fn add(self, other: &'b RMatrix<T>) -> RMatrix<T> {
-        if let (Ok(my_mat), Ok(other_mat)) = (self.matrix, other.matrix) {
+        if let (Ok(my_mat), Ok(other_mat)) = (self.matrix.as_ref(), other.matrix.as_ref()) {
             if (my_mat.rows == other_mat.rows) && (my_mat.cols == other_mat.cols) {
                 let mut new_matrix = Vec::new();
                 for row in 0..my_mat.rows {
