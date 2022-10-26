@@ -1,5 +1,5 @@
 pub mod rmatrix_addition;
-pub mod rmatrix_cross_multiplication;
+pub mod rmatrix_cross_multiplcation;
 pub mod rmatrix_equality;
 pub mod rmatrix_std;
 pub mod rmatrix_subtraction;

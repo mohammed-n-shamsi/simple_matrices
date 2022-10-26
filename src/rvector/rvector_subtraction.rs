@@ -8,24 +8,7 @@ where
 {
     type Output = Self;
     fn sub(self, other: Self) -> Self::Output {
-        if let (Ok(my_data), Ok(other_data)) = (self.data, other.data) {
-            if my_data.len() == other_data.len() {
-                let mut new_data = Vec::new();
-                let iter_range = 0..my_data.len();
-                for idx in iter_range {
-                    new_data.push(my_data[idx] - other_data[idx]);
-                }
-                RVector { data: Ok(new_data) }
-            } else {
-                RVector {
-                    data: Err(OpErrors::MismatchedSizes),
-                }
-            }
-        } else {
-            RVector {
-                data: Err(OpErrors::InvalidInputs),
-            }
-        }
+        &self - &other
     }
 }
 
