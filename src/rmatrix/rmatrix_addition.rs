@@ -26,11 +26,11 @@ where
             if (my_mat.rows == other_mat.rows) && (my_mat.cols == other_mat.cols) {
                 let mut new_matrix = Vec::new();
                 for row in 0..my_mat.rows {
-                    let mut new_col = Vec::new();
+                    let mut new_row = Vec::new();
                     for col in 0..my_mat.cols {
-                        new_col.push(my_mat.data[row][col] + other_mat.data[row][col]);
+                        new_row.push(my_mat.data[row][col] + other_mat.data[row][col]);
                     }
-                    new_matrix.push(new_col)
+                    new_matrix.push(new_row)
                 }
                 RMatrix {
                     matrix: Ok(RMatrixDetails {
